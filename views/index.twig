@@ -1,0 +1,42 @@
+{% extends 'layout.twig' %}
+
+{% block body %}
+    <h1>SteemFeed.com</h1>
+    <p>RSS, Atom and JSON feeds for every Steem blog</p>
+
+    <div>
+        <b>RSS Feed:</b>
+        https://steemfeed.com/rss/@<input name="rss">
+        <div>
+            <button id="rss">Open Feed</button>
+        </div>
+    </div>
+    <div>
+        <b>Atom Feed:</b>
+        https://steemfeed.com/atom/@<input name="atom">
+        <div>
+            <button id="atom">Open Feed</button>
+        </div>
+    </div>
+    <div>
+        <b>JSON Feed:</b>
+        https://steemfeed.com/json/@<input name="json">
+        <div>
+            <button id="json">Open Feed</button>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+        $(() => {
+            $('#rss').click(() => {
+                window.location.href = "https://steemfeed.com/rss/@" + $('[name=rss]').val()
+            });
+            $('#atom').click(() => {
+                window.location.href = "https://steemfeed.com/atom/@" + $('[name=atom]').val()
+            });
+            $('#json').click(() => {
+                window.location.href = "https://steemfeed.com/json/@" + $('[name=json]').val()
+            })
+        })
+    </script>
+{% endblock %}

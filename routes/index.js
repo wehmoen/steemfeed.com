@@ -3,7 +3,7 @@ var router = express.Router();
 let steem = require("steem");
 let Feed = require("feed").Feed;
 var Remarkable = require('remarkable');
-var md = new Remarkable();
+var md = new Remarkable({html:true, breaks: true, linkify: true});
 
 const getValidImage = array => {
     return array &&

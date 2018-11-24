@@ -3,7 +3,7 @@ var router = express.Router();
 let steem = require("steem");
 let Feed = require("feed").Feed;
 var Remarkable = require('remarkable');
-var md = new Remarkable({html:true, breaks: true, linkify: true});
+var md = new Remarkable({html: true, breaks: true, linkify: true});
 
 const getValidImage = array => {
     return array &&
@@ -15,8 +15,8 @@ const getValidImage = array => {
 };
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+router.get('/', function (req, res, next) {
+    res.render('index', {title: 'Express'});
 });
 
 router.get("/rss/@:account", (req, res) => {
@@ -25,16 +25,16 @@ router.get("/rss/@:account", (req, res) => {
 
     let feed = new Feed({
         title: "Posts by @" + account,
-        description: "Steemit blog from @" +account,
-        id: "@" +account,
+        description: "Steemit blog from @" + account,
+        id: "@" + account,
         link: "https://steemit.com/@" + account,
-        image: "https://steemitimages.com/u/"+account+"/avatar",
+        image: "https://steemitimages.com/u/" + account + "/avatar",
         favicon: "https://steemit.com/images/favicons/favicon-32x32.png",
-        copyright: "All rights reserved "+(new Date().getFullYear())+", @"+account,
+        copyright: "All rights reserved " + (new Date().getFullYear()) + ", @" + account,
         generator: "SteemFeed", // optional, default = 'Feed for Node.js'
         feedLinks: {
-            json: "https://steemfeed.com/json/@"+account,
-            atom: "https://steemfeed.com/atom/@" +account
+            json: "https://steemfeed.com/json/@" + account,
+            atom: "https://steemfeed.com/atom/@" + account
         },
         author: {
             name: "SteemFeed",
@@ -43,38 +43,38 @@ router.get("/rss/@:account", (req, res) => {
         }
     });
 
-    steem.api.getDiscussionsByAuthorBeforeDate(req.params.account, "", '2100-01-01T00:00:00', 25,	(err, result) =>{
-      result.forEach(post => {
+    steem.api.getDiscussionsByAuthorBeforeDate(req.params.account, "", '2100-01-01T00:00:00', 25, (err, result) => {
+        result.forEach(post => {
 
-          let image = "";
+            let image = "";
 
-          try {
-              let jsonMetadata = JSON.parse(post.json_metadata);
-              if (jsonMetadata && jsonMetadata.image) {
-                  image = getValidImage(jsonMetadata.image);
-              }
-          } catch (e) {
+            try {
+                let jsonMetadata = JSON.parse(post.json_metadata);
+                if (jsonMetadata && jsonMetadata.image) {
+                    image = getValidImage(jsonMetadata.image);
+                }
+            } catch (e) {
 
-          }
+            }
 
-          feed.addItem({
-            title: post.title,
-              id: post.permlink,
-              link: 'https://steemit.com/' + post.category + '/@' + post.author + '/' + post.permlink,
-              content: md.render(post.body),
-              author: [
-                  {
-                      name: "@" + post.author,
-                      link: 'https://steemit.com/@'+post.author
-                  }
-              ],
-              date: (new Date(post.created)),
-              image
-          });
-      })
+            feed.addItem({
+                title: post.title,
+                id: post.permlink,
+                link: 'https://steemit.com/' + post.category + '/@' + post.author + '/' + post.permlink,
+                content: md.render(post.body),
+                author: [
+                    {
+                        name: "@" + post.author,
+                        link: 'https://steemit.com/@' + post.author
+                    }
+                ],
+                date: (new Date(post.created)),
+                image
+            });
+        });
         feed.addCategory("Technologie");
-      res.type("xml")
-      res.send(feed.rss2())
+        res.type("xml");
+        res.send(feed.rss2())
     });
 });
 router.get("/atom/@:account", (req, res) => {
@@ -83,16 +83,16 @@ router.get("/atom/@:account", (req, res) => {
 
     let feed = new Feed({
         title: "Posts by @" + account,
-        description: "Steemit blog from @" +account,
-        id: "@" +account,
+        description: "Steemit blog from @" + account,
+        id: "@" + account,
         link: "https://steemit.com/@" + account,
-        image: "https://steemitimages.com/u/"+account+"/avatar",
+        image: "https://steemitimages.com/u/" + account + "/avatar",
         favicon: "https://steemit.com/images/favicons/favicon-32x32.png",
-        copyright: "All rights reserved "+(new Date().getFullYear())+", @"+account,
+        copyright: "All rights reserved " + (new Date().getFullYear()) + ", @" + account,
         generator: "SteemFeed", // optional, default = 'Feed for Node.js'
         feedLinks: {
-            json: "https://steemfeed.com/json/@"+account,
-            rss: "https://steemfeed.com/rss/@" +account
+            json: "https://steemfeed.com/json/@" + account,
+            rss: "https://steemfeed.com/rss/@" + account
         },
         author: {
             name: "SteemFeed",
@@ -101,38 +101,38 @@ router.get("/atom/@:account", (req, res) => {
         }
     });
 
-    steem.api.getDiscussionsByAuthorBeforeDate(req.params.account, "", '2100-01-01T00:00:00', 25,	(err, result) =>{
-      result.forEach(post => {
+    steem.api.getDiscussionsByAuthorBeforeDate(req.params.account, "", '2100-01-01T00:00:00', 25, (err, result) => {
+        result.forEach(post => {
 
-          let image = "";
+            let image = "";
 
-          try {
-              let jsonMetadata = JSON.parse(post.json_metadata);
-              if (jsonMetadata && jsonMetadata.image) {
-                  image = getValidImage(jsonMetadata.image);
-              }
-          } catch (e) {
+            try {
+                let jsonMetadata = JSON.parse(post.json_metadata);
+                if (jsonMetadata && jsonMetadata.image) {
+                    image = getValidImage(jsonMetadata.image);
+                }
+            } catch (e) {
 
-          }
+            }
 
-          feed.addItem({
-            title: post.title,
-              id: post.permlink,
-              link: 'https://steemit.com/' + post.category + '/@' + post.author + '/' + post.permlink,
-              content: md.render(post.body),
-              author: [
-                  {
-                      name: "@" + post.author,
-                      link: 'https://steemit.com/@'+post.author
-                  }
-              ],
-              date: (new Date(post.created)),
-              image
-          });
-      })
+            feed.addItem({
+                title: post.title,
+                id: post.permlink,
+                link: 'https://steemit.com/' + post.category + '/@' + post.author + '/' + post.permlink,
+                content: md.render(post.body),
+                author: [
+                    {
+                        name: "@" + post.author,
+                        link: 'https://steemit.com/@' + post.author
+                    }
+                ],
+                date: (new Date(post.created)),
+                image
+            });
+        });
         feed.addCategory("Technologie");
-      res.type("xml")
-      res.send(feed.atom1())
+        res.type("xml");
+        res.send(feed.atom1())
     });
 });
 router.get("/json/@:account", (req, res) => {
@@ -141,16 +141,16 @@ router.get("/json/@:account", (req, res) => {
 
     let feed = new Feed({
         title: "Posts by @" + account,
-        description: "Steemit blog from @" +account,
-        id: "@" +account,
+        description: "Steemit blog from @" + account,
+        id: "@" + account,
         link: "https://steemit.com/@" + account,
-        image: "https://steemitimages.com/u/"+account+"/avatar",
+        image: "https://steemitimages.com/u/" + account + "/avatar",
         favicon: "https://steemit.com/images/favicons/favicon-32x32.png",
-        copyright: "All rights reserved "+(new Date().getFullYear())+", @"+account,
+        copyright: "All rights reserved " + (new Date().getFullYear()) + ", @" + account,
         generator: "SteemFeed", // optional, default = 'Feed for Node.js'
         feedLinks: {
-            rss: "https://steemfeed.com/rss/@"+account,
-            atom: "https://steemfeed.com/atom/@" +account
+            rss: "https://steemfeed.com/rss/@" + account,
+            atom: "https://steemfeed.com/atom/@" + account
         },
         author: {
             name: "SteemFeed",
@@ -159,38 +159,37 @@ router.get("/json/@:account", (req, res) => {
         }
     });
 
-    steem.api.getDiscussionsByAuthorBeforeDate(req.params.account, "", '2100-01-01T00:00:00', 25,	(err, result) =>{
-      result.forEach(post => {
+    steem.api.getDiscussionsByAuthorBeforeDate(req.params.account, "", '2100-01-01T00:00:00', 25, (err, result) => {
+        result.forEach(post => {
 
-          let image = "";
+            let image = "";
 
-          try {
-              let jsonMetadata = JSON.parse(post.json_metadata);
-              if (jsonMetadata && jsonMetadata.image) {
-                  image = getValidImage(jsonMetadata.image);
-              }
-          } catch (e) {
+            try {
+                let jsonMetadata = JSON.parse(post.json_metadata);
+                if (jsonMetadata && jsonMetadata.image) {
+                    image = getValidImage(jsonMetadata.image);
+                }
+            } catch (e) {
 
-          }
+            }
 
-          feed.addItem({
-            title: post.title,
-              id: post.permlink,
-              link: 'https://steemit.com/' + post.category + '/@' + post.author + '/' + post.permlink,
-              content: md.render(post.body),
-              author: [
-                  {
-                      name: "@" + post.author,
-                      link: 'https://steemit.com/@'+post.author
-                  }
-              ],
-              date: (new Date(post.created)),
-              image
-          });
-      })
+            feed.addItem({
+                title: post.title,
+                id: post.permlink,
+                link: 'https://steemit.com/' + post.category + '/@' + post.author + '/' + post.permlink,
+                content: md.render(post.body),
+                author: [
+                    {
+                        name: "@" + post.author,
+                        link: 'https://steemit.com/@' + post.author
+                    }
+                ],
+                date: (new Date(post.created)),
+                image
+            });
+        });
         feed.addCategory("Technologie");
-      // res.type("json")
-      res.json(JSON.parse(feed.json1()))
+        res.json(JSON.parse(feed.json1()))
     });
 });
 
@@ -203,16 +202,16 @@ router.get('/reblog/rss/@:account', (req, res) => {
 
     let feed = new Feed({
         title: "Reblogs by @" + account,
-        description: "Steemit reblogs from @" +account,
-        id: "@" +account,
+        description: "Steemit reblogs from @" + account,
+        id: "@" + account,
         link: "https://steemit.com/@" + account,
-        image: "https://steemitimages.com/u/"+account+"/avatar",
+        image: "https://steemitimages.com/u/" + account + "/avatar",
         favicon: "https://steemit.com/images/favicons/favicon-32x32.png",
-        copyright: "All rights reserved "+(new Date().getFullYear())+", @"+account,
+        copyright: "All rights reserved " + (new Date().getFullYear()) + ", @" + account,
         generator: "SteemFeed", // optional, default = 'Feed for Node.js'
         feedLinks: {
-            rss: "https://steemfeed.com/reblog/rss/@"+account,
-            atom: "https://steemfeed.com/reblog/atom/@" +account
+            rss: "https://steemfeed.com/reblog/rss/@" + account,
+            atom: "https://steemfeed.com/reblog/atom/@" + account
         },
         author: {
             name: "SteemFeed",
@@ -222,7 +221,7 @@ router.get('/reblog/rss/@:account', (req, res) => {
     });
 
     steem.api.getDiscussionsByBlog(query, function (err, result) {
-        if(err) {
+        if (err) {
             res.send("404")
         } else {
             result = result.map(p => {
@@ -257,7 +256,7 @@ router.get('/reblog/rss/@:account', (req, res) => {
                     author: [
                         {
                             name: "@" + p.author,
-                            link: 'https://steemit.com/@'+p.author
+                            link: 'https://steemit.com/@' + p.author
                         }
                     ],
                     date: (new Date(p.created)),
@@ -282,16 +281,16 @@ router.get('/reblog/atom/@:account', (req, res) => {
 
     let feed = new Feed({
         title: "Reblogs by @" + account,
-        description: "Steemit reblogs from @" +account,
-        id: "@" +account,
+        description: "Steemit reblogs from @" + account,
+        id: "@" + account,
         link: "https://steemit.com/@" + account,
-        image: "https://steemitimages.com/u/"+account+"/avatar",
+        image: "https://steemitimages.com/u/" + account + "/avatar",
         favicon: "https://steemit.com/images/favicons/favicon-32x32.png",
-        copyright: "All rights reserved "+(new Date().getFullYear())+", @"+account,
+        copyright: "All rights reserved " + (new Date().getFullYear()) + ", @" + account,
         generator: "SteemFeed", // optional, default = 'Feed for Node.js'
         feedLinks: {
-            rss: "https://steemfeed.com/reblog/rss/@"+account,
-            atom: "https://steemfeed.com/reblog/atom/@" +account
+            rss: "https://steemfeed.com/reblog/rss/@" + account,
+            atom: "https://steemfeed.com/reblog/atom/@" + account
         },
         author: {
             name: "SteemFeed",
@@ -301,7 +300,7 @@ router.get('/reblog/atom/@:account', (req, res) => {
     });
 
     steem.api.getDiscussionsByBlog(query, function (err, result) {
-        if(err) {
+        if (err) {
             res.send("404")
         } else {
             result = result.map(p => {
@@ -336,7 +335,7 @@ router.get('/reblog/atom/@:account', (req, res) => {
                     author: [
                         {
                             name: "@" + p.author,
-                            link: 'https://steemit.com/@'+p.author
+                            link: 'https://steemit.com/@' + p.author
                         }
                     ],
                     date: (new Date(p.created)),
@@ -360,16 +359,16 @@ router.get('/reblog/json/@:account', (req, res) => {
 
     let feed = new Feed({
         title: "Reblogs by @" + account,
-        description: "Steemit reblogs from @" +account,
-        id: "@" +account,
+        description: "Steemit reblogs from @" + account,
+        id: "@" + account,
         link: "https://steemit.com/@" + account,
-        image: "https://steemitimages.com/u/"+account+"/avatar",
+        image: "https://steemitimages.com/u/" + account + "/avatar",
         favicon: "https://steemit.com/images/favicons/favicon-32x32.png",
-        copyright: "All rights reserved "+(new Date().getFullYear())+", @"+account,
+        copyright: "All rights reserved " + (new Date().getFullYear()) + ", @" + account,
         generator: "SteemFeed", // optional, default = 'Feed for Node.js'
         feedLinks: {
-            rss: "https://steemfeed.com/reblog/rss/@"+account,
-            atom: "https://steemfeed.com/reblog/atom/@" +account
+            rss: "https://steemfeed.com/reblog/rss/@" + account,
+            atom: "https://steemfeed.com/reblog/atom/@" + account
         },
         author: {
             name: "SteemFeed",
@@ -379,7 +378,7 @@ router.get('/reblog/json/@:account', (req, res) => {
     });
 
     steem.api.getDiscussionsByBlog(query, function (err, result) {
-        if(err) {
+        if (err) {
             res.send("404")
         } else {
             result = result.map(p => {
@@ -405,8 +404,6 @@ router.get('/reblog/json/@:account', (req, res) => {
                     image = getValidImage(p.json_metadata.image);
                 }
 
-                console.log(image)
-
                 feed.addItem({
                     title: p.title,
                     id: p.permlink,
@@ -415,7 +412,7 @@ router.get('/reblog/json/@:account', (req, res) => {
                     author: [
                         {
                             name: "@" + p.author,
-                            link: 'https://steemit.com/@'+p.author
+                            link: 'https://steemit.com/@' + p.author
                         }
                     ],
                     date: (new Date(p.created)),

@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 let steem = require("steem");
 let Feed = require("feed").Feed;
+var Remarkable = require('remarkable');
+var md = new Remarkable();
 
 const getValidImage = array => {
     return array &&
@@ -59,7 +61,7 @@ router.get("/rss/@:account", (req, res) => {
             title: post.title,
               id: post.permlink,
               link: 'https://steemit.com/' + post.category + '/@' + post.author + '/' + post.permlink,
-              content: post.body,
+              content: md.render(post.body),
               author: [
                   {
                       name: "@" + post.author,
@@ -117,7 +119,7 @@ router.get("/atom/@:account", (req, res) => {
             title: post.title,
               id: post.permlink,
               link: 'https://steemit.com/' + post.category + '/@' + post.author + '/' + post.permlink,
-              content: post.body,
+              content: md.render(post.body),
               author: [
                   {
                       name: "@" + post.author,
@@ -175,7 +177,7 @@ router.get("/json/@:account", (req, res) => {
             title: post.title,
               id: post.permlink,
               link: 'https://steemit.com/' + post.category + '/@' + post.author + '/' + post.permlink,
-              content: post.body,
+              content: md.render(post.body),
               author: [
                   {
                       name: "@" + post.author,
@@ -394,10 +396,11 @@ router.get('/reblog/json/@:account', (req, res) => {
             result.forEach(p => {
 
                 let image = null;
-
                 if (p.json_metadata && p.json_metadata.image) {
                     image = getValidImage(p.json_metadata.image);
                 }
+
+                console.log(image)
 
                 feed.addItem({
                     title: p.title,

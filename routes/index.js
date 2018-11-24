@@ -192,4 +192,233 @@ router.get("/json/@:account", (req, res) => {
     });
 });
 
+router.get('/reblog/rss/@:account', (req, res) => {
+    let {account} = req.params;
+    var query = {
+        tag: account,
+        limit: 25
+    };
+
+    let feed = new Feed({
+        title: "Reblogs by @" + account,
+        description: "Steemit reblogs from @" +account,
+        id: "@" +account,
+        link: "https://steemit.com/@" + account,
+        image: "https://steemitimages.com/u/"+account+"/avatar",
+        favicon: "https://steemit.com/images/favicons/favicon-32x32.png",
+        copyright: "All rights reserved "+(new Date().getFullYear())+", @"+account,
+        generator: "SteemFeed", // optional, default = 'Feed for Node.js'
+        feedLinks: {
+            rss: "https://steemfeed.com/reblog/rss/@"+account,
+            atom: "https://steemfeed.com/reblog/atom/@" +account
+        },
+        author: {
+            name: "SteemFeed",
+            email: "contact@steemfeed.com",
+            link: "https://steemfeed.com"
+        }
+    });
+
+    steem.api.getDiscussionsByBlog(query, function (err, result) {
+        if(err) {
+            res.send("404")
+        } else {
+            result = result.map(p => {
+                return {
+                    title: p.title,
+                    permlink: p.permlink,
+                    category: p.category,
+                    author: p.author,
+                    created: p.created,
+                    first_reblogged_on: p.first_reblogged_on,
+                    json_metadata: JSON.parse(p.json_metadata)
+                }
+            });
+            result = result.filter((p) => {
+                return p.first_reblogged_on !== undefined
+            });
+
+            result.forEach(p => {
+
+                let image = null;
+
+                if (p.json_metadata && p.json_metadata.image) {
+                    image = getValidImage(p.json_metadata.image);
+                }
+
+                feed.addItem({
+                    title: p.title,
+                    id: p.permlink,
+                    link: 'https://steemit.com/' + p.category + '/@' + p.author + '/' + p.permlink,
+                    author: [
+                        {
+                            name: "@" + p.author,
+                            link: 'https://steemit.com/@'+p.author
+                        }
+                    ],
+                    date: (new Date(p.created)),
+                    image
+                });
+            });
+
+            feed.addCategory("Technologie");
+
+            res.type("xml");
+            res.send(feed.rss2())
+        }
+    });
+
+});
+router.get('/reblog/atom/@:account', (req, res) => {
+    let {account} = req.params;
+    var query = {
+        tag: account,
+        limit: 25
+    };
+
+    let feed = new Feed({
+        title: "Reblogs by @" + account,
+        description: "Steemit reblogs from @" +account,
+        id: "@" +account,
+        link: "https://steemit.com/@" + account,
+        image: "https://steemitimages.com/u/"+account+"/avatar",
+        favicon: "https://steemit.com/images/favicons/favicon-32x32.png",
+        copyright: "All rights reserved "+(new Date().getFullYear())+", @"+account,
+        generator: "SteemFeed", // optional, default = 'Feed for Node.js'
+        feedLinks: {
+            rss: "https://steemfeed.com/reblog/rss/@"+account,
+            atom: "https://steemfeed.com/reblog/atom/@" +account
+        },
+        author: {
+            name: "SteemFeed",
+            email: "contact@steemfeed.com",
+            link: "https://steemfeed.com"
+        }
+    });
+
+    steem.api.getDiscussionsByBlog(query, function (err, result) {
+        if(err) {
+            res.send("404")
+        } else {
+            result = result.map(p => {
+                return {
+                    title: p.title,
+                    permlink: p.permlink,
+                    category: p.category,
+                    author: p.author,
+                    created: p.created,
+                    first_reblogged_on: p.first_reblogged_on,
+                    json_metadata: JSON.parse(p.json_metadata)
+                }
+            });
+            result = result.filter((p) => {
+                return p.first_reblogged_on !== undefined
+            });
+
+            result.forEach(p => {
+
+                let image = null;
+
+                if (p.json_metadata && p.json_metadata.image) {
+                    image = getValidImage(p.json_metadata.image);
+                }
+
+                feed.addItem({
+                    title: p.title,
+                    id: p.permlink,
+                    link: 'https://steemit.com/' + p.category + '/@' + p.author + '/' + p.permlink,
+                    author: [
+                        {
+                            name: "@" + p.author,
+                            link: 'https://steemit.com/@'+p.author
+                        }
+                    ],
+                    date: (new Date(p.created)),
+                    image
+                });
+            });
+
+            feed.addCategory("Technologie");
+
+            res.type("xml");
+            res.send(feed.atom1())
+        }
+    });
+});
+router.get('/reblog/json/@:account', (req, res) => {
+    let {account} = req.params;
+    var query = {
+        tag: account,
+        limit: 25
+    };
+
+    let feed = new Feed({
+        title: "Reblogs by @" + account,
+        description: "Steemit reblogs from @" +account,
+        id: "@" +account,
+        link: "https://steemit.com/@" + account,
+        image: "https://steemitimages.com/u/"+account+"/avatar",
+        favicon: "https://steemit.com/images/favicons/favicon-32x32.png",
+        copyright: "All rights reserved "+(new Date().getFullYear())+", @"+account,
+        generator: "SteemFeed", // optional, default = 'Feed for Node.js'
+        feedLinks: {
+            rss: "https://steemfeed.com/reblog/rss/@"+account,
+            atom: "https://steemfeed.com/reblog/atom/@" +account
+        },
+        author: {
+            name: "SteemFeed",
+            email: "contact@steemfeed.com",
+            link: "https://steemfeed.com"
+        }
+    });
+
+    steem.api.getDiscussionsByBlog(query, function (err, result) {
+        if(err) {
+            res.send("404")
+        } else {
+            result = result.map(p => {
+                return {
+                    title: p.title,
+                    permlink: p.permlink,
+                    category: p.category,
+                    author: p.author,
+                    created: p.created,
+                    first_reblogged_on: p.first_reblogged_on,
+                    json_metadata: JSON.parse(p.json_metadata)
+                }
+            });
+            result = result.filter((p) => {
+                return p.first_reblogged_on !== undefined
+            });
+
+            result.forEach(p => {
+
+                let image = null;
+
+                if (p.json_metadata && p.json_metadata.image) {
+                    image = getValidImage(p.json_metadata.image);
+                }
+
+                feed.addItem({
+                    title: p.title,
+                    id: p.permlink,
+                    link: 'https://steemit.com/' + p.category + '/@' + p.author + '/' + p.permlink,
+                    author: [
+                        {
+                            name: "@" + p.author,
+                            link: 'https://steemit.com/@'+p.author
+                        }
+                    ],
+                    date: (new Date(p.created)),
+                    image
+                });
+            });
+
+            feed.addCategory("Technologie");
+
+            res.json(JSON.parse(feed.json1()))
+        }
+    });
+});
+
 module.exports = router;

@@ -230,6 +230,7 @@ router.get('/reblog/rss/@:account', (req, res) => {
                     title: p.title,
                     permlink: p.permlink,
                     category: p.category,
+                    body: p.body,
                     author: p.author,
                     created: p.created,
                     first_reblogged_on: p.first_reblogged_on,
@@ -252,6 +253,7 @@ router.get('/reblog/rss/@:account', (req, res) => {
                     title: p.title,
                     id: p.permlink,
                     link: 'https://steemit.com/' + p.category + '/@' + p.author + '/' + p.permlink,
+                    content: md.render(p.body),
                     author: [
                         {
                             name: "@" + p.author,
@@ -307,6 +309,7 @@ router.get('/reblog/atom/@:account', (req, res) => {
                     title: p.title,
                     permlink: p.permlink,
                     category: p.category,
+                    body: p.body,
                     author: p.author,
                     created: p.created,
                     first_reblogged_on: p.first_reblogged_on,
@@ -329,6 +332,7 @@ router.get('/reblog/atom/@:account', (req, res) => {
                     title: p.title,
                     id: p.permlink,
                     link: 'https://steemit.com/' + p.category + '/@' + p.author + '/' + p.permlink,
+                    content: md.render(p.body),
                     author: [
                         {
                             name: "@" + p.author,
@@ -383,6 +387,7 @@ router.get('/reblog/json/@:account', (req, res) => {
                     title: p.title,
                     permlink: p.permlink,
                     category: p.category,
+                    body: p.body,
                     author: p.author,
                     created: p.created,
                     first_reblogged_on: p.first_reblogged_on,
@@ -406,6 +411,7 @@ router.get('/reblog/json/@:account', (req, res) => {
                     title: p.title,
                     id: p.permlink,
                     link: 'https://steemit.com/' + p.category + '/@' + p.author + '/' + p.permlink,
+                    content: md.render(p.body),
                     author: [
                         {
                             name: "@" + p.author,

@@ -31,7 +31,7 @@ router.get("/rss/@:account", (req, res) => {
         image: "https://steemitimages.com/u/" + account + "/avatar",
         favicon: "https://steemit.com/images/favicons/favicon-32x32.png",
         copyright: "All rights reserved " + (new Date().getFullYear()) + ", @" + account,
-        generator: "SteemFeed", // optional, default = 'Feed for Node.js'
+        generator: "SteemFeed",
         feedLinks: {
             json: "https://steemfeed.com/json/@" + account,
             atom: "https://steemfeed.com/atom/@" + account
@@ -69,6 +69,7 @@ router.get("/rss/@:account", (req, res) => {
                     }
                 ],
                 date: (new Date(post.created)),
+                payout: post.total_payout_value,
                 image
             });
         });
@@ -233,6 +234,7 @@ router.get('/reblog/rss/@:account', (req, res) => {
                     author: p.author,
                     created: p.created,
                     first_reblogged_on: p.first_reblogged_on,
+                    payout: p.total_payout_value,
                     json_metadata: JSON.parse(p.json_metadata)
                 }
             });
@@ -247,7 +249,6 @@ router.get('/reblog/rss/@:account', (req, res) => {
                 if (p.json_metadata && p.json_metadata.image) {
                     image = getValidImage(p.json_metadata.image);
                 }
-
                 feed.addItem({
                     title: p.title,
                     id: p.permlink,
@@ -260,6 +261,7 @@ router.get('/reblog/rss/@:account', (req, res) => {
                         }
                     ],
                     date: (new Date(p.created)),
+                    payout: p.payout,
                     image
                 });
             });

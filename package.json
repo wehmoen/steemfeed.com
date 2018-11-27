@@ -10,12 +10,12 @@
     "cors": "^2.8.5",
     "debug": "~2.6.9",
     "express": "~4.16.0",
-    "feed": "^2.0.1",
+    "feed": "git+https://github.com/wehmoen/feed.git",
     "http-errors": "~1.6.2",
     "morgan": "~1.9.0",
     "node-fetch": "^2.3.0",
     "remarkable": "^1.7.1",
-    "steem": "^0.7.2",
+    "steem": "^0.7.3",
     "twig": "~0.10.3"
   }
 }
